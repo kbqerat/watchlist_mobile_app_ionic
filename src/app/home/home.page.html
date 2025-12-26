@@ -1,20 +1,148 @@
 <ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="goToProfile()">
+        <ion-icon name="person-circle-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title mode="ios" style="font-weight: 800; letter-spacing: 1px"
+      >MY WATCHLIST</ion-title
+    >
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon name="log-out-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <!-- MODIFICATION : La barre de recherche appelle maintenant l'API -->
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <ion-searchbar
+      [(ngModel)]="searchTerm"
+      (ionInput)="onSearchInput($event)"
+      placeholder="Chercher en ligne (ex: Batman)..."
+      mode="ios"
+    ></ion-searchbar>
+  </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="filterValue" mode="ios">
+      <ion-segment-button value="all"
+        ><ion-label>Tous</ion-label></ion-segment-button
+      >
+      <ion-segment-button value="movie"
+        ><ion-label>Films</ion-label></ion-segment-button
+      >
+      <ion-segment-button value="series"
+        ><ion-label>Séries</ion-label></ion-segment-button
+      >
+    </ion-segment>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <!-- AJOUT : Liste des suggestions API (Overlay) -->
+  <!-- Cette liste s'affiche uniquement quand searchResults contient des données -->
+  <ion-list *ngIf="searchResults.length > 0" class="api-overlay">
+    <ion-list-header>
+      <ion-label color="medium">Résultats en ligne</ion-label>
+    </ion-list-header>
+    <ion-item
+      *ngFor="let res of searchResults"
+      (click)="addFromApi(res)"
+      button
+    >
+      <ion-thumbnail slot="start">
+        <img
+          [src]="res.show.image?.medium || 'https://via.placeholder.com/150'"
+        />
+      </ion-thumbnail>
+      <ion-label>
+        <h3>{{ res.show.name }}</h3>
+        <p>{{ res.show.genres?.join(', ') }}</p>
+      </ion-label>
+      <ion-icon name="add-circle-outline" slot="end" color="primary"></ion-icon>
+    </ion-item>
+  </ion-list>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <!-- Ton bouton d'ajout manuel reste ici -->
+  <div class="add-container">
+    <ion-item lines="none" class="add-input-item">
+      <ion-input
+        [(ngModel)]="newMovie"
+        placeholder="Ajouter un titre manuellement..."
+      ></ion-input>
+      <ion-select [(ngModel)]="itemType" interface="popover" slot="end">
+        <ion-select-option value="movie">🎬</ion-select-option>
+        <ion-select-option value="series">📺</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-button expand="block" (click)="add()" shape="round" class="add-btn">
+      <ion-icon name="add-circle" slot="start"></ion-icon>AJOUTER
+    </ion-button>
+  </div>
+
+  <!-- Ta grille de cartes personnelle -->
+  <div class="movie-grid">
+    <ion-card
+      *ngFor="let item of getFilteredMovies(movies$ | async)"
+      class="movie-card"
+    >
+      <ion-card-content>
+        <div class="type-row">
+          <ion-badge
+            [color]="item.type === 'movie' ? 'primary' : 'tertiary'"
+            mode="ios"
+          >
+            {{ item.type === 'movie' ? 'FILM' : 'SÉRIE' }}
+          </ion-badge>
+        </div>
+
+        <div class="title-row">
+          <ion-checkbox
+            [checked]="item.watched"
+            (click)="toggle(item)"
+          ></ion-checkbox>
+          <h2
+            class="movie-title"
+            [style.text-decoration]="item.watched ? 'line-through' : 'none'"
+          >
+            {{ item.title }}
+          </h2>
+        </div>
+
+        <div class="status-row">
+          <ion-select
+            [value]="item.status || 'todo'"
+            (ionChange)="changeStatus(item.id, $event.detail.value)"
+            interface="popover"
+            class="status-select"
+          >
+            <ion-select-option value="todo">⏳ À voir</ion-select-option>
+            <ion-select-option value="watching">🍿 En cours</ion-select-option>
+            <ion-select-option value="finished">✅ Terminé</ion-select-option>
+          </ion-select>
+        </div>
+
+        <div class="card-footer">
+          <div class="rating-area">
+            <span
+              *ngIf="item.watched || item.status === 'finished'"
+              class="rating-badge"
+            >
+              {{ item.note ? '⭐ ' + item.note : 'Pas de note' }}
+            </span>
+          </div>
+          <div class="button-group">
+            <ion-button class="btn-circle info" (click)="goToDetails(item.id)">
+              <ion-icon name="eye-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+            <ion-button class="btn-circle delete" (click)="delete(item.id)">
+              <ion-icon name="trash-bin-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
   </div>
 </ion-content>

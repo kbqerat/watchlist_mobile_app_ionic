@@ -1,0 +1,32 @@
+<ion-content class="ion-padding">
+  <!-- SECTION HEADER AJOUTÉE -->
+  <div class="header-section ion-text-center">
+    <div class="icon-box">
+      <ion-icon name="play-circle"></ion-icon>
+    </div>
+    <h1>FLIX<span>APP</span></h1>
+    <p>
+      Votre collection personnelle de films et séries, organisée en un clic.
+    </p>
+  </div>
+
+  <div class="login-form">
+    <ion-item lines="full">
+      <ion-label position="floating">Email</ion-label>
+      <ion-input type="email" [(ngModel)]="email"></ion-input>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-label position="floating">Mot de passe</ion-label>
+      <ion-input type="password" [(ngModel)]="password"></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" (click)="login()" class="ion-margin-top">
+      Connexion
+    </ion-button>
+
+    <ion-button expand="block" fill="clear" (click)="goToRegister()">
+      Nouveau ici ? Créer un compte
+    </ion-button>
+  </div>
+</ion-content>

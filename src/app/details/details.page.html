@@ -1,0 +1,50 @@
+<ion-content>
+  <!-- Header avec image -->
+  <div class="hero-header">
+    <div class="overlay"></div>
+    <ion-buttons slot="start" class="back-btn">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <h1 class="movie-main-title">{{ movie?.title }}</h1>
+  </div>
+
+  <div class="details-content ion-padding" *ngIf="movie">
+    <div class="info-chip">
+      <ion-badge color="danger">{{ movie.type | uppercase }}</ion-badge>
+      <ion-badge [color]="movie.watched ? 'success' : 'warning'">
+        {{ movie.watched ? 'VU' : 'À VOIR' }}
+      </ion-badge>
+    </div>
+
+    <h3 class="section-title">Ma Note</h3>
+    <ion-item lines="none" class="custom-input-item">
+      <ion-select
+        [(ngModel)]="movie.note"
+        interface="popover"
+        style="width: 100%"
+      >
+        <ion-select-option [value]="1">⭐ (Mauvais)</ion-select-option>
+        <ion-select-option [value]="2">⭐⭐ (Moyen)</ion-select-option>
+        <ion-select-option [value]="3">⭐⭐⭐ (Bien)</ion-select-option>
+        <ion-select-option [value]="4">⭐⭐⭐⭐ (Très Bien)</ion-select-option>
+        <ion-select-option [value]="5"
+          >⭐⭐⭐⭐⭐ (Chef d'œuvre)</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+
+    <h3 class="section-title">Description & Notes</h3>
+    <ion-item lines="none" class="custom-input-item">
+      <ion-textarea
+        [(ngModel)]="movie.description"
+        rows="8"
+        placeholder="Écris tes pensées sur ce contenu..."
+      >
+      </ion-textarea>
+    </ion-item>
+
+    <ion-button expand="block" (click)="save()" shape="round" class="save-btn">
+      ENREGISTRER
+    </ion-button>
+  </div>
+</ion-content>

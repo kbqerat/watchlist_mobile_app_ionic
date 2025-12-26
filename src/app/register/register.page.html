@@ -1,0 +1,62 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/login"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Créer un compte</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding ion-text-center">
+  <div class="header-section">
+    <ion-icon
+      name="person-add-outline"
+      color="primary"
+      style="font-size: 64px"
+    ></ion-icon>
+    <h1>Rejoignez FLIXAPP</h1>
+    <p>Commencez à organiser votre watchlist dès maintenant.</p>
+  </div>
+
+  <div class="form-container">
+    <ion-item lines="none" class="custom-input">
+      <ion-label position="stacked">Email</ion-label>
+      <ion-input
+        type="email"
+        [(ngModel)]="email"
+        placeholder="exemple@mail.com"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item lines="none" class="custom-input">
+      <ion-label position="stacked">Mot de passe</ion-label>
+      <ion-input
+        type="password"
+        [(ngModel)]="password"
+        placeholder="6 caractères minimum"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item lines="none" class="custom-input">
+      <ion-label position="stacked">Confirmer le mot de passe</ion-label>
+      <ion-input
+        type="password"
+        [(ngModel)]="confirmPassword"
+        placeholder="Répétez le mot de passe"
+      ></ion-input>
+    </ion-item>
+
+    <ion-button
+      expand="block"
+      (click)="register()"
+      shape="round"
+      class="main-btn"
+    >
+      S'INSCRIRE
+    </ion-button>
+
+    <ion-button expand="block" fill="clear" (click)="goToLogin()">
+      Déjà un compte ? Se connecter
+    </ion-button>
+  </div>
+</ion-content>

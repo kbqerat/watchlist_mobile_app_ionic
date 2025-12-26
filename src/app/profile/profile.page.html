@@ -1,0 +1,83 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Mon Profil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Header Profil -->
+  <div class="profile-header ion-text-center">
+    <ion-icon
+      name="person-circle"
+      color="primary"
+      style="font-size: 80px"
+    ></ion-icon>
+    <h2>{{ userEmail | async }}</h2>
+    <p>Passionné de Cinéma 🍿</p>
+  </div>
+
+  <!-- Statistiques -->
+  <div *ngIf="stats$ | async as stats">
+    <h3 class="ion-padding-start">Mes Statistiques</h3>
+
+    <ion-grid>
+      <ion-row>
+        <!-- Total -->
+        <ion-col size="12">
+          <ion-card class="stat-card main">
+            <ion-card-content>
+              <div class="stat-value">{{ stats.total }}</div>
+              <div class="stat-label">Titres dans ma liste</div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <!-- Films vs Séries -->
+        <ion-col size="6">
+          <ion-card class="stat-card">
+            <ion-card-content>
+              <ion-icon name="film-outline" color="primary"></ion-icon>
+              <div class="stat-value">{{ stats.films }}</div>
+              <div class="stat-label">Films</div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="6">
+          <ion-card class="stat-card">
+            <ion-card-content>
+              <ion-icon name="tv-outline" color="tertiary"></ion-icon>
+              <div class="stat-value">{{ stats.series }}</div>
+              <div class="stat-label">Séries</div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <!-- Terminés vs À voir -->
+        <ion-col size="6">
+          <ion-card class="stat-card finished">
+            <ion-card-content>
+              <ion-icon
+                name="checkmark-done-outline"
+                color="success"
+              ></ion-icon>
+              <div class="stat-value">{{ stats.finished }}</div>
+              <div class="stat-label">Terminés</div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="6">
+          <ion-card class="stat-card todo">
+            <ion-card-content>
+              <ion-icon name="time-outline" color="warning"></ion-icon>
+              <div class="stat-value">{{ stats.todo }}</div>
+              <div class="stat-label">À voir</div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
